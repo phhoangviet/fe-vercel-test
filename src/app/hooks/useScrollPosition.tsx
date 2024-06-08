@@ -22,5 +22,5 @@ export function useScrollPosition() {
     };
   });
 
-  return scrollPosition;
+  return { scrollPosition, setScrollPosition };
 }

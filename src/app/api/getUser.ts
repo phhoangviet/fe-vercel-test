@@ -14,8 +14,6 @@ export const getUsers = async (
     resWrap.status = res.statusText;
     resWrap.statusCode = res.status;
     const data = await res.json();
-    console.log(data, "data");
-    console.log(res.ok);
     if (!res.ok) {
       resWrap.error = data;
     } else {
