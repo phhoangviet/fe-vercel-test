@@ -18,6 +18,7 @@ export const Users = ({
   error?: Error;
 }) => {
   const router = useRouter();
+  const [isFetching, setIsFetching] = useState(false);
   const scrolling = useScrollPosition();
   const { toast } = useToast();
   const [users, setUsers] = useState<User[]>(data);
@@ -25,9 +26,14 @@ export const Users = ({
   const [limit, setLimit] = useState(10);
   const [_error, _setError] = useState<Error | null>(error || null);
   useEffect(() => {
-    console.log(scrolling);
+    if (scrolling > 99.99) {
+      setIsFetching(true);
+    }
+  }, [scrolling, isFetching]);
+  useEffect(() => {
     async function fetchMore() {
       const { data, error } = await getUsers(offset + limit, 10);
+      setIsFetching(false);
       console.log(data, "data");
       if (error?.message) {
         _setError(error);
@@ -44,11 +50,10 @@ export const Users = ({
         );
       }
     }
-    if (scrolling > 99.99) {
+    if (isFetching) {
       fetchMore();
     }
-  }, [scrolling, offset, limit, total, users]);
-
+  }, [isFetching, offset, limit, total, users]);
   const onClick = () => {};
   useEffect(() => {
     if (_error?.message) {

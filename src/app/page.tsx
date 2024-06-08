@@ -4,6 +4,8 @@ import { ListUsers } from "./model/user";
 import { Users } from "./components/users";
 import Error from "next/error";
 import { getUsers } from "./api/getUser";
+import { Suspense } from "react";
+import Loading from "./loading";
 export default async function Home({
   params: { offset, limit },
 }: {
@@ -18,7 +20,13 @@ export default async function Home({
   });
   return (
     <main>
-      <Users data={data?.users || []} total={data?.total || 0} error={error} />
+      <Suspense fallback={<Loading />}>
+        <Users
+          data={data?.users || []}
+          total={data?.total || 0}
+          error={error}
+        />
+      </Suspense>
     </main>
   );
 }

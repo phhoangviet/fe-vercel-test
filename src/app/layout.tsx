@@ -5,6 +5,8 @@ import "./globals.css";
 
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -28,7 +30,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        {children}
+        <Suspense fallback={<Loading />}>
+          <div>{children}</div>
+        </Suspense>
         <Toaster />
       </body>
     </html>
