@@ -7,6 +7,8 @@ import { useScrollPosition } from "../hooks/useScrollPosition";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { getUsers } from "../api/getUser";
+import { UserItem } from "./userItem";
+import { LoadingSkeleton } from "./LoadingSkeleton";
 
 export const Users = ({
   data,
@@ -17,7 +19,6 @@ export const Users = ({
   total: number;
   error?: Error;
 }) => {
-  const router = useRouter();
   const [isFetching, setIsFetching] = useState(false);
   const { scrollPosition, setScrollPosition } = useScrollPosition();
   const { toast } = useToast();
@@ -61,7 +62,6 @@ export const Users = ({
       fetchMore();
     }
   }, [isFetching, offset, limit, total, users, setScrollPosition]);
-  const onClick = () => {};
   useEffect(() => {
     if (_error?.message) {
       toast({
@@ -71,29 +71,16 @@ export const Users = ({
     }
   }, [_error, toast]);
   return (
-    <main>
+    <div className="max-w-[600px] m-auto">
       {users.map((el) => (
         <div key={el.id}>
-          <div>
-            <div># {el.id}</div>
-            {el.first_name} {el.last_name} {el.email} {el.days}
-            <div>total days for meeting {el.total_day_meeting}</div>
-            <div>
-              total days for free working{" "}
-              {el.days - (el.total_day_meeting || 0)}
-            </div>
-            <hr />
-            {el.meetings.map((m) => (
-              <div key={m.id}>
-                {m.room_id}: {m.start_day} {m.end_day}
-                <div> totals meetings: {m.end_day - m.start_day + 1} days</div>
-              </div>
-            ))}
-            <hr />
-          </div>
+          <UserItem user={el} />
         </div>
       ))}
-      {offset + limit >= total && <div>No more data</div>}
-    </main>
+      {isFetching && offset + limit < total && <LoadingSkeleton />}
+      {offset + limit >= total && (
+        <div className="text-center p-4 font-bold">No more data</div>
+      )}
+    </div>
   );
 };

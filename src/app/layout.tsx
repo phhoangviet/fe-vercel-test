@@ -30,9 +30,10 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Suspense fallback={<Loading />}>
-          <div>{children}</div>
-        </Suspense>
+        <div className="w-full p-4 text-center bg-gray-700 text-white text-xl">
+          Working days
+        </div>
+        {children}
         <Toaster />
       </body>
     </html>

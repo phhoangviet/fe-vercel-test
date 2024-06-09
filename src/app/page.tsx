@@ -12,12 +12,7 @@ export default async function Home({
   params: { offset: number; limit: number };
 }) {
   const { data, error } = await getUsers(offset, limit);
-  data?.users.forEach((user) => {
-    const _sum = user.meetings.reduce((sum, cur) => {
-      return (sum += cur.end_day - cur.start_day + 1);
-    }, 0);
-    user.total_day_meeting = _sum;
-  });
+
   return (
     <main>
       <Suspense fallback={<Loading />}>
